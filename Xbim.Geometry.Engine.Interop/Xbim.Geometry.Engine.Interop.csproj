@@ -2,12 +2,35 @@
 <Project DefaultTargets="Build" Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Year>$([System.DateTime]::Now.ToString("yy"))</Year> 
+    <Month>$([System.DateTime]::Now.ToString("MM"))</Month>
+    <Day>$([System.DateTime]::Now.ToString("dd"))</Day>
+    <Minute>$([System.Int32]::Parse($([System.DateTime]::Now.ToString("mm"))))</Minute>
+    <Hour>$([System.Int32]::Parse($([System.DateTime]::Now.ToString("HH"))))</Hour>
+
+    <MinuteOfDay>$([MSBuild]::Add($(Minute),$([MSBuild]::Multiply($(Hour),60))))</MinuteOfDay>
+    <HalfMinuteOfDay>$([System.Convert]::ToInt16($([MSBuild]::Divide($(MinuteOfDay), 2))))</HalfMinuteOfDay>
+    
+    <AssemblyFileVersionAttribute>[assembly:System.Reflection.AssemblyVersionAttribute("5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)")];</AssemblyFileVersionAttribute>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <Title>Xbim Geometry Engine</Title>
     <Description>Provides support for the  Ifc4 and Ifc2x3 Geometry conversion.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Xbim.Geometry.Engine.Interop</PackageId>
+
+    <!-- Unify versions -->
+    <Version>5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</Version>
+    <AssemblyVersion>5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</AssemblyVersion>
+    <FileVersion>5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</FileVersion>
+    
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>CS1591;CS7034;CS7035</NoWarn>
   </PropertyGroup>
   
   <ItemGroup>
