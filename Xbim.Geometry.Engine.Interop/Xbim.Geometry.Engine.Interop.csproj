@@ -2,6 +2,8 @@
 <Project DefaultTargets="Build" Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <IssuedVersion>5.1</IssuedVersion>
+    
     <Year>$([System.DateTime]::Now.ToString("yy"))</Year> 
     <Month>$([System.DateTime]::Now.ToString("MM"))</Month>
     <Day>$([System.DateTime]::Now.ToString("dd"))</Day>
@@ -11,7 +13,7 @@
     <MinuteOfDay>$([MSBuild]::Add($(Minute),$([MSBuild]::Multiply($(Hour),60))))</MinuteOfDay>
     <HalfMinuteOfDay>$([System.Convert]::ToInt16($([MSBuild]::Divide($(MinuteOfDay), 2))))</HalfMinuteOfDay>
     
-    <AssemblyFileVersionAttribute>[assembly:System.Reflection.AssemblyVersionAttribute("5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)")];</AssemblyFileVersionAttribute>
+    <AssemblyFileVersionAttribute>[assembly:System.Reflection.AssemblyVersionAttribute("$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)")];</AssemblyFileVersionAttribute>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -23,9 +25,9 @@
     <PackageId>Xbim.Geometry.Engine.Interop</PackageId>
 
     <!-- Unify versions -->
-    <Version>5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</Version>
-    <AssemblyVersion>5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</AssemblyVersion>
-    <FileVersion>5.0.$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</FileVersion>
+    <Version>$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</Version>
+    <AssemblyVersion>$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</AssemblyVersion>
+    <FileVersion>$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</FileVersion>
     
   </PropertyGroup>
 
