@@ -1,5 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IssuedVersion>5.1</IssuedVersion>
 
+    <Year>$([System.DateTime]::Now.ToString("yy"))</Year> 
+    <Month>$([System.DateTime]::Now.ToString("MM"))</Month>
+    <Day>$([System.DateTime]::Now.ToString("dd"))</Day>
+    <Minute>$([System.Int32]::Parse($([System.DateTime]::Now.ToString("mm"))))</Minute>
+    <Hour>$([System.Int32]::Parse($([System.DateTime]::Now.ToString("HH"))))</Hour>
+
+    <MinuteOfDay>$([MSBuild]::Add($(Minute),$([MSBuild]::Multiply($(Hour),60))))</MinuteOfDay>
+    <HalfMinuteOfDay>$([System.Convert]::ToInt16($([MSBuild]::Divide($(MinuteOfDay), 2))))</HalfMinuteOfDay>
+    
+    <AssemblyFileVersionAttribute>[assembly:System.Reflection.AssemblyVersionAttribute("$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)")];</AssemblyFileVersionAttribute>    
+  </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>net47</TargetFrameworks>
     <Title>Xbim ModelGeometry Scene</Title>
@@ -7,6 +20,12 @@
     <Description>Provides support for the Geometry Scene creation.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+
+    <!-- Unify versions -->
+    <Version>$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</Version>
+    <AssemblyVersion>$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</AssemblyVersion>
+    <FileVersion>$(IssuedVersion).$(Year)$(Month).$(Day)$(HalfMinuteOfDay)</FileVersion>
+
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
