@@ -29,6 +29,8 @@ namespace Xbim
 			void Init(IIfcBSplineCurveWithKnots^ curve, ILogger^ logger);
 			void Init(IIfcOffsetCurve2D^ offset, ILogger^ logger);
 			void Init(IIfcPcurve^ curve, ILogger^ logger);
+			void Init(IIfcCircularArcSegment2D^ arcSeg, ILogger^ logger);
+			void Init(IIfcLineSegment2D^ arcSeg, ILogger^ logger);
 		public:
 			XbimCurve2D(const Handle(Geom2d_Curve)& curve2d);
 			XbimCurve2D(const Handle(Geom2d_Curve)& curve2d, double p1, double p2);
@@ -47,6 +49,9 @@ namespace Xbim
 			XbimCurve2D(IIfcBSplineCurve^ curve, ILogger^ logger) { Init(curve, logger); }
 			XbimCurve2D(IIfcBSplineCurveWithKnots^ curve, ILogger^ logger) { Init(curve, logger); }
 			XbimCurve2D(IIfcOffsetCurve2D^ curve, ILogger^ logger){ Init(curve, logger); }
+			XbimCurve2D(IIfcCurveSegment2D^ arcSeg, ILogger^ logger);
+			XbimCurve2D(IIfcCircularArcSegment2D^ arcSeg, ILogger^ logger);
+			XbimCurve2D(IIfcLineSegment2D^ arcSeg, ILogger^ logger);
 
 #pragma region operators
 			operator const Handle(Geom2d_Curve)& () { return *pCurve2D; }

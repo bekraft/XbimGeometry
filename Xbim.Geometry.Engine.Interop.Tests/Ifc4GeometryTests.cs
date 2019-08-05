@@ -106,7 +106,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 Assert.IsTrue(er.Entity != null, "No IIfcExtrudedAreaSolid found");
                 var extrudedSolid = geomEngine.CreateSolid(er.Entity, logger);
                 HelperFunctions.IsValidSolid(extrudedSolid);
-                Assert.AreEqual<long>((long)extrudedSolid.Volume, 14999524619);
+                Assert.AreEqual<long>((long)extrudedSolid.Volume , 14999524619);
             }
         }
 

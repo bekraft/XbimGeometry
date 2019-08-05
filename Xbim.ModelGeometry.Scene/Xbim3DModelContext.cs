@@ -1025,6 +1025,24 @@ namespace Xbim.ModelGeometry.Scene
                     instance.BoundingBox.Transform(placementTransform);
                 }
             }
+            //create graphic representations for Linear Placement Alignments
+            foreach (var alignment in Model.Instances.OfType<IIfcAlignment>())
+            {
+                GeometryReference instance;
+                if (contextHelper.ShapeLookup.TryGetValue(alignment.EntityLabel, out instance) && alignment.Representation != null && alignment.Representation.Representations.Count > 0)
+                {
+                    XbimMatrix3D placementTransform = XbimPlacementTree.GetTransform(alignment, contextHelper.PlacementTree, Engine);
+                    // int context = 0;
+                    var gRep = alignment.Representation?.Representations?.FirstOrDefault();
+                    var context = gRep.ContextOfItems;
+                    var intContext = (context == null) ? 0 : context.EntityLabel;
+
+                    WriteShapeInstanceToStore(instance.GeometryId, instance.StyleLabel, intContext, alignment,
+                        placementTransform, instance.BoundingBox,
+                        XbimGeometryRepresentationType.OpeningsAndAdditionsIncluded, txn);
+                    instance.BoundingBox.Transform(placementTransform);
+                }
+            }
 
             Parallel.ForEach(products, contextHelper.ParallelOptions, product =>
             {
@@ -1307,6 +1325,26 @@ namespace Xbim.ModelGeometry.Scene
                     }
                 }
             }
+
+            foreach (var alignment in Model.Instances.OfType<IIfcAlignment>())
+            {
+                using (var geomModel = Engine.CreateAlignment(alignment, _logger))
+                {
+                    if (geomModel != null && geomModel.IsValid)
+                    {
+                        var shapeGeom = Engine.CreateShapeGeometry(geomModel, precision, deflection, deflectionAngle, geomStorageType, _logger);
+                        shapeGeom.IfcShapeLabel = alignment.EntityLabel;
+
+                        var refCounter = new GeometryReference
+                        {
+                            BoundingBox = (shapeGeom).BoundingBox,
+                            GeometryId = geometryStore.AddShapeGeometry(shapeGeom)
+                        };
+                        contextHelper.ShapeLookup.TryAdd(shapeGeom.IfcShapeLabel, refCounter);
+                    }
+                }
+            }
+
             var geomCache = new ConcurrentDictionary<int, IXbimGeometryObject>();
             Model.Tag = geomCache;
             ConcurrentDictionary<int, byte> processed = new ConcurrentDictionary<int, byte>();

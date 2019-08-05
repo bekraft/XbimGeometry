@@ -39,6 +39,7 @@ namespace Xbim
 			void Init(IIfcSweptAreaSolid^ solid, ILogger^ logger);
 			void Init(IIfcExtrudedAreaSolid^ solid, ILogger^ logger);
 			void Init(IIfcSurfaceCurveSweptAreaSolid^ IIfcSolid, ILogger^ logger);
+			void Init(IIfcFixedReferenceSweptAreaSolid^ IIfcSolid, ILogger^ logger);
 			void Init(IIfcRevolvedAreaSolid^ solid, ILogger^ logger);
 			void Init(IIfcTriangulatedFaceSet^ IIfcSolid, ILogger^ logger);
 			void Init(IIfcPolygonalFaceSet^ IIfcSolid, ILogger^ logger);
@@ -83,6 +84,7 @@ namespace Xbim
 			XbimSolidSet(IIfcCsgSolid^ IIfcSolid, ILogger^ logger);
 			XbimSolidSet(IIfcSweptAreaSolid^ solid, ILogger^ logger);
 			XbimSolidSet(IIfcSurfaceCurveSweptAreaSolid^ IIfcSolid, ILogger^ logger);
+			XbimSolidSet(IIfcFixedReferenceSweptAreaSolid ^ repItem, ILogger ^ logger);
 			XbimSolidSet(IIfcExtrudedAreaSolid^ solid, ILogger^ logger);
 			XbimSolidSet(IIfcRevolvedAreaSolid^ solid, ILogger^ logger);
 			XbimSolidSet(IIfcTriangulatedFaceSet^ IIfcSolid, ILogger^ logger);

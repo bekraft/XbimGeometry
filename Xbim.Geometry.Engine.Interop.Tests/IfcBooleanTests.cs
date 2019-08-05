@@ -827,7 +827,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 solidResult = geomEngine.CreateSolidSet(er.Entity, logger).FirstOrDefault();
                 var actualVolume = solidResult.Volume;
                 Assert.IsTrue(solidBody.Volume > actualVolume, "This cut solid should have less volume than the body shape");
-                Assert.IsTrue(solidResult.Faces.Count == 9, "This solid should have 9 faces");
+                Assert.IsTrue(solidResult.Faces.Count == 10, "This solid should have 10 faces");
             }
         }
         [TestMethod]
@@ -902,7 +902,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                     var body = geomEngine.CreateSolidSet(bodyEntity.Entity, logger);
                     Assert.IsTrue(body.Count == 8, "Eight solids should be returned");
                     var hole = geomEngine.CreateSolid(holeEntity.Entity, logger);
-                    var result = body.Cut(hole, bodyEntity.Entity.Model.ModelFactors.Precision);
+                    var result = body.Cut(hole,bodyEntity.Entity.Model.ModelFactors.Precision);
 
                     Assert.IsTrue(result.Count == 8, "Eight solids should be returned");
                     foreach (var solid in result)
@@ -910,8 +910,8 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                         IsSolidTest(solid);
                     }
 
-                }
-
+                } 
+               
             }
         }
         //[TestMethod]

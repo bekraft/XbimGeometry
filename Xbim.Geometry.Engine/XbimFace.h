@@ -50,6 +50,8 @@ namespace Xbim
 			void Init(IIfcCylindricalSurface ^ surface, ILogger^ logger);
 			void Init(double x, double y, double tolerance, ILogger^ logger); 
 			void Init(IIfcFace^ face, ILogger^ logger);
+			void Init(IIfcLinearPlacement^ linearPlacement, ILogger^ logger);
+			void Init(IIfcAlignment2DHorizontal ^ alignment, ILogger ^ logger);
 		public:
 			
 			//destructors
@@ -123,6 +125,8 @@ namespace Xbim
 			XbimFace(IIfcCylindricalSurface ^ surface, ILogger^ logger);
 			XbimFace(double x, double y, double tolerance, ILogger^ logger);
 			XbimFace(IIfcFace ^ face, ILogger^ logger);
+			XbimFace(IIfcLinearPlacement^ linearPlacement, ILogger^ logger);
+			XbimFace(IIfcAlignment2DHorizontal^ alignment, ILogger^ logger);
 #pragma endregion
 
 #pragma region Internal Properties
@@ -143,6 +147,7 @@ namespace Xbim
 			XbimVector3D NormalAt(double u, double v);
 			void SetLocation(TopLoc_Location loc);
 			static bool RemoveDuplicatePoints(TColgp_SequenceOfPnt& polygon, bool closed, double tol);
+			XbimMatrix3D LinearAlignmentPosition(double distanceAlong, double offsetLateral, double offsetVertical, double offsetLongitudinal, gp_Dir latAxis, gp_Dir vertAxis,  ILogger^ logger);
 #pragma endregion
 
 
