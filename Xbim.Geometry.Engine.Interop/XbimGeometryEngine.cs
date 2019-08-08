@@ -591,6 +591,22 @@ namespace Xbim.Geometry.Engine.Interop
             }
         }
 
+        public IXbimSolid CreateAlignment(IIfcAlignment alignment, ILogger logger = null)
+        {
+            using (new Tracer(LogHelper.CurrentFunctionName(), this._logger, alignment))
+            {
+                return _engine.CreateAlignment(alignment, logger);
+            }
+        }
+
+        public IXbimFace CreateFace(IIfcAlignment2DHorizontal alignment, ILogger logger = null)
+        {
+            using (new Tracer(LogHelper.CurrentFunctionName(), this._logger, alignment))
+            {
+                return _engine.CreateFace(alignment, logger);
+            }
+        }
+
         public void WriteTriangulation(TextWriter tw, IXbimGeometryObject shape, double tolerance, double deflection)
         {
             WriteTriangulation(tw, shape, tolerance, deflection: deflection, angle: 0.5);
@@ -822,8 +838,6 @@ namespace Xbim.Geometry.Engine.Interop
                 return _engine.CreateSurfaceModel(shell, logger);
             }
         }
-
-        
     }
 
     public static class LogHelper
