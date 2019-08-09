@@ -1,0 +1,46 @@
+ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION((''),'2;1');
+FILE_NAME('','2019-03-20T15:56:51',(''),(''),'BuildingSmart IfcKit by Constructivity','IfcDoc 12.0.0.0','');
+FILE_SCHEMA(('IFC4x1'));
+ENDSEC;
+
+DATA;
+
+#1= IfcProject('00JZK7rtz3fQUKFrbW9sWY',#2,'IfcAlignment Project',$,$,$,$,(#3),#4);
+#2= IfcOwnerHistory(#6,#7,$,.NOCHANGE.,$,$,$,0);
+#3= IfcGeometricRepresentationContext($,'Model',3,$,#8,$);
+#4= IfcUnitAssignment((#10,#11,#12,#13));
+#6= IfcPersonAndOrganization(#14,#15,$);
+#7= IfcApplication(#15,'RTM','TUM Open Infra Platform 2017','OIP');
+#8= IfcAxis2Placement3D(#16,$,$);
+#9= IfcMapConversion(#3,#17,6236.63223620871,4031.97899820341,0.,$,$,$);
+#10= IfcSIUnit($,.LENGTHUNIT.,$,.METRE.);
+#11= IfcSIUnit($,.PLANEANGLEUNIT.,$,.RADIAN.);
+#12= IfcSIUnit($,.AREAUNIT.,$,.SQUARE_METRE.);
+#13= IfcSIUnit($,.VOLUMEUNIT.,$,.CUBIC_METRE.);
+#14= IfcPerson($,'User (FamilyName)','User (GivenName)',$,$,$,$,$);
+#15= IfcOrganization($,'TUM','Chair of Computational Modeling and Simulation',$,$);
+#16= IfcCartesianPoint((0.,0.,0.));
+#17= IfcProjectedCRS('EPSG:31467','EPSG:31467 - DHDN / 3-Degree Gauss-Krueger Zone 3','EPSG:31467',$,'Gauss-Krueger','3',#18);
+#18= IfcSIUnit($,.LENGTHUNIT.,$,.METRE.);
+
+#5= IfcRelAggregates('0ERMnvnC9Btv_gY56_a0BO',$,$,$,#1,(#19));
+
+#19= IfcSite('1N6$hLpJ16pv9PiZSKyIlD',$,'Terrain surface','My description.',$,#20,$,$,$,$,$,0.,$,$);
+#20= IfcLocalPlacement($,#8);
+
+#25= IfcAlignment('0l9FNAVNf65QF$1Nq8NPi$',$,$,'Alignment - (7)',$,#20,$,#70,$);
+#70= IfcAlignmentCurve(#71,$,$);
+#71= IfcAlignment2DHorizontal(0.,(#72,#73,#74));
+#72= IfcAlignment2DHorizontalSegment(.F.,$,$,#75);
+#73= IfcAlignment2DHorizontalSegment($,$,$,#76);
+#74= IfcAlignment2DHorizontalSegment(.F.,$,$,#77);
+#75= IfcLineSegment2D(#78,0.276263654232025,344.0880815594);
+#76= IfcCircularArcSegment2D(#79,0.27626371383667,543.868331488064,913.945625400933,.F.);
+#77= IfcLineSegment2D(#80,5.96437168121338,508.539093456223);
+#78= IfcCartesianPoint((75.1215,-232.185));
+#79= IfcCartesianPoint((406.162,-138.331));
+#80= IfcCartesianPoint((941.92,-149.731));
+ENDSEC;
+END-ISO-10303-21;

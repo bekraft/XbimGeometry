@@ -30,7 +30,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
-    <PackageReference Include="Xbim.IO.MemoryModel" Version="5.1.266-develop" />
+    <PackageReference Include="Xbim.IO.MemoryModel" Version="5.1.19219-ifc41.7505" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +52,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestFiles\grid_with_polylines.ifc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\Ifc4AlignmentFiles\horizontal-alignment-without-transition-curve.ifc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\Ifc4AlignmentFiles\horizontal-alignment.ifc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\Ifc4AlignmentFiles\linear-placement.ifc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\Ifc4AlignmentFiles\vertical-alignment.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestFiles\Ifc4TestFiles\Can_cut_polygonal_faceset_solids.ifc">

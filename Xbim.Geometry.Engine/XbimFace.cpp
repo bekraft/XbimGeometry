@@ -360,7 +360,7 @@ namespace Xbim
 			gp_Pln xypln(xoy3);
 			ShapeFix_ShapeTolerance tolFixer;
 			Handle(Geom_Plane) plane = new Geom_Plane(xypln);
-			double tolerance = alignment->Model->ModelFactors->Precision;
+			double tolerance = alignment->Model->ModelFactors->Precision * 100;
 
 			for each (IIfcAlignment2DHorizontalSegment^ seg in alignment->Segments)
 			{
@@ -372,7 +372,6 @@ namespace Xbim
 			}
 			BRepLib::BuildCurves3d(loop);
 			BRepBuilderAPI_MakeWire wireMaker(loop);
-			
 			if (wireMaker.IsDone())
 			{
 				TopTools_IndexedMapOfShape map;
