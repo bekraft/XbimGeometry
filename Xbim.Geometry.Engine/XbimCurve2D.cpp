@@ -21,6 +21,8 @@
 #include <ShapeConstruct_ProjectCurveOnSurface.hxx>
 
 #include <GCPnts_AbscissaPoint.hxx>
+#include <GeomAdaptor_Curve.hxx>
+#include <GCPnts_UniformDeflection.hxx>
 using namespace System::Linq;
 namespace Xbim
 {
@@ -157,6 +159,10 @@ namespace Xbim
 			else if (dynamic_cast<IIfcOffsetCurve2D^>(curve)) Init((IIfcOffsetCurve2D^)curve, logger);
 			else if (dynamic_cast<IIfcIndexedPolyCurve^>(curve)) Init((IIfcIndexedPolyCurve^)curve, logger);
 			else if (dynamic_cast<IIfcPcurve^>(curve)) Init((IIfcPcurve^)curve, logger);
+			else if (dynamic_cast<IIfcCircularArcSegment2D^>(curve)) Init((IIfcCircularArcSegment2D^)curve, logger);
+			else if (dynamic_cast<IIfcLineSegment2D^>(curve)) Init((IIfcLineSegment2D^)curve, logger);
+			else if (dynamic_cast<IIfcTransitionCurveSegment2D^>(curve)) Init((IIfcTransitionCurveSegment2D^)curve, logger);
+
 			else throw gcnew Exception(String::Format("Unsupported Curve Type {0}", curve->GetType()->Name));
 		}
 
@@ -180,6 +186,7 @@ namespace Xbim
 				}
 			}
 		}
+
 		void XbimCurve2D::Init(IIfcIndexedPolyCurve ^ polyCurve, ILogger ^ logger)
 		{
 			double tolerance = polyCurve->Model->ModelFactors->Precision;
@@ -365,6 +372,7 @@ namespace Xbim
 			pCurve2D = new Handle(Geom2d_Curve);
 			*pCurve2D = new Geom2d_BSplineCurve(poles, knots, mults, 1);
 		}
+
 		void XbimCurve2D::Init(IIfcCircle^ circle, ILogger^ logger)
 		{
 			double radius = circle->Radius;
@@ -573,23 +581,13 @@ namespace Xbim
 			pCurve2D = new Handle(Geom2d_Curve);
 			*pCurve2D = new Geom2d_BSplineCurve(poles, knots, knotMultiplicities, (Standard_Integer)bspline->Degree);
 		}
-		XbimCurve2D::XbimCurve2D(IIfcCurveSegment2D ^ arcSeg, ILogger ^ logger)
+
+		void XbimCurve2D::Init(IIfcTransitionCurveSegment2D ^ arcSeg, ILogger ^ logger)
 		{
-			if (dynamic_cast<IIfcCircularArcSegment2D^>(arcSeg))
-				Init((IIfcCircularArcSegment2D^)arcSeg, logger);
-			else if (dynamic_cast<IIfcLineSegment2D^>(arcSeg))
-				Init((IIfcLineSegment2D^)arcSeg, logger);
-			else
-				throw gcnew NotImplementedException("Failed to build IIfcCurveSegment2D, unsupported segment type");
+			// TODO IIfcTransitionCurveSegment2D
+			throw gcnew NotImplementedException("Failed to build IIfcCurveSegment2D, unsupported segment type");
 		}
-		XbimCurve2D::XbimCurve2D(IIfcCircularArcSegment2D ^ arcSeg, ILogger ^ logger)
-		{
-			Init(arcSeg, logger);
-		}
-		XbimCurve2D::XbimCurve2D(IIfcLineSegment2D ^ arcSeg, ILogger ^ logger)
-		{
-			Init(arcSeg, logger);
-		}
+
 		void XbimCurve2D::Init(IIfcCircularArcSegment2D ^ arcSeg, ILogger ^ logger)
 		{
 			//ensure sensible radians
@@ -635,6 +633,10 @@ namespace Xbim
 			*pCurve2D = new Geom2d_TrimmedCurve(line, 0, arcSeg->SegmentLength);			
 		}
 
+		IEnumerable<XbimPoint3D>^ XbimCurve2D::Discretize(double deflecion, double tolerance = 1e-5)
+		{
+			throw gcnew NotImplementedException();
+		}
 	}
 
 }

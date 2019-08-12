@@ -627,8 +627,7 @@ namespace Xbim.Geometry.Engine.Interop
             }
         }
 
-        public void Mesh(IXbimMeshReceiver receiver, IXbimGeometryObject geometryObject, double precision, double deflection,
-            double angle = 0.5)
+        public void Mesh(IXbimMeshReceiver receiver, IXbimGeometryObject geometryObject, double precision, double deflection, double angle = 0.5)
         {
             using (new Tracer(LogHelper.CurrentFunctionName(), this._logger, geometryObject))
             {

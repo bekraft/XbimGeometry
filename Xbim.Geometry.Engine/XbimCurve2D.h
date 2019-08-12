@@ -31,6 +31,7 @@ namespace Xbim
 			void Init(IIfcPcurve^ curve, ILogger^ logger);
 			void Init(IIfcCircularArcSegment2D^ arcSeg, ILogger^ logger);
 			void Init(IIfcLineSegment2D^ arcSeg, ILogger^ logger);
+			void Init(IIfcTransitionCurveSegment2D^ arcSeg, ILogger ^ logger);
 		public:
 			XbimCurve2D(const Handle(Geom2d_Curve)& curve2d);
 			XbimCurve2D(const Handle(Geom2d_Curve)& curve2d, double p1, double p2);
@@ -49,9 +50,9 @@ namespace Xbim
 			XbimCurve2D(IIfcBSplineCurve^ curve, ILogger^ logger) { Init(curve, logger); }
 			XbimCurve2D(IIfcBSplineCurveWithKnots^ curve, ILogger^ logger) { Init(curve, logger); }
 			XbimCurve2D(IIfcOffsetCurve2D^ curve, ILogger^ logger){ Init(curve, logger); }
-			XbimCurve2D(IIfcCurveSegment2D^ arcSeg, ILogger^ logger);
-			XbimCurve2D(IIfcCircularArcSegment2D^ arcSeg, ILogger^ logger);
-			XbimCurve2D(IIfcLineSegment2D^ arcSeg, ILogger^ logger);
+			XbimCurve2D(IIfcLineSegment2D^ curve, ILogger^ logger) { Init(curve, logger); }
+			XbimCurve2D(IIfcCircularArcSegment2D^ curve, ILogger^ logger) { Init(curve, logger); }
+			XbimCurve2D(IIfcTransitionCurveSegment2D^ curve, ILogger^ logger) { Init(curve, logger); }
 
 #pragma region operators
 			operator const Handle(Geom2d_Curve)& () { return *pCurve2D; }
@@ -62,8 +63,8 @@ namespace Xbim
 			virtual property bool IsSet{bool get() override { return false; }; }
 			virtual property  XbimGeometryObjectType GeometryType{XbimGeometryObjectType  get() override { return XbimGeometryObjectType::XbimCurveType; }; }
 			virtual IXbimGeometryObject^ Transform(XbimMatrix3D matrix3D) override;
-			virtual IXbimGeometryObject^ TransformShallow(XbimMatrix3D matrix3D)override;
-			virtual IEnumerable<XbimPoint3D>^ Intersections(IXbimCurve^ intersector,double tolerance, ILogger^logger);
+			virtual IXbimGeometryObject^ TransformShallow(XbimMatrix3D matrix3D) override;
+			virtual IEnumerable<XbimPoint3D>^ Intersections(IXbimCurve^ intersector,double tolerance, ILogger^ logger);
 			virtual property XbimPoint3D Start{XbimPoint3D get(); }
 			virtual property XbimPoint3D End{XbimPoint3D get(); }
 			virtual property double Length{double get(); }
@@ -74,6 +75,7 @@ namespace Xbim
 			virtual XbimVector3D TangentAt(double parameter);
 			IXbimCurve^ ToCurve3D();
 			virtual property XbimRect3D BoundingBox {XbimRect3D get() override; }
+			virtual IEnumerable<XbimPoint3D>^ Discretize(double deflecion, double tolerance);
 		};
 	}
 }
