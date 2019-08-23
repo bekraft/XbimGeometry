@@ -76,6 +76,7 @@ namespace Xbim
 			IXbimCurve^ ToCurve3D();
 			virtual property XbimRect3D BoundingBox {XbimRect3D get() override; }
 			virtual IEnumerable<XbimPoint3D>^ Discretize(double deflecion, double tolerance);
+			virtual IEnumerable<XbimPoint3D>^ DiscretizeUniform(double equidistance, double tolerance);
 		};
 	}
 }

@@ -619,6 +619,7 @@ namespace Xbim
 				*pCurve2D = new Geom2d_TrimmedCurve(circ, 0, uEnd);
 			}
 		}
+
 		void XbimCurve2D::Init(IIfcLineSegment2D ^ arcSeg, ILogger ^ /*logger*/)
 		{
 			double radians = arcSeg->StartDirection * arcSeg->Model->ModelFactors->AngleToRadiansConversionFactor;
@@ -633,9 +634,77 @@ namespace Xbim
 			*pCurve2D = new Geom2d_TrimmedCurve(line, 0, arcSeg->SegmentLength);			
 		}
 
-		IEnumerable<XbimPoint3D>^ XbimCurve2D::Discretize(double deflecion, double tolerance = 1e-5)
+		IEnumerable<XbimPoint3D>^ XbimCurve2D::Discretize(double deflecion, double /* tolerance */ )
 		{
-			throw gcnew NotImplementedException();
+			Handle(Geom2d_Curve) curve = *pCurve2D;
+
+			Geom2dAdaptor_Curve curve_adaptator(curve);
+			GCPnts_UniformDeflection discretizer;
+			discretizer.Initialize(curve_adaptator, deflecion);
+			List<XbimPoint3D>^ points = gcnew List<XbimPoint3D>();
+
+			if (discretizer.IsDone())
+			{
+				bool isLineSegment = false;
+				switch (discretizer.NbPoints())
+				{
+				case 0:
+				case 1:
+					// Add first and last point, if there's only a single or no point (shouldn't happen)
+					points->Add(GetPoint(curve->FirstParameter()));				
+					points->Add(GetPoint(curve->LastParameter()));
+					break;
+				case 2:
+					// Check if type is a line (no deflection available)					
+					if (curve->IsKind(STANDARD_TYPE(Geom2d_TrimmedCurve)))
+					{	// Test basis curve
+						Handle(Geom2d_Curve) bCurve = Handle(Geom2d_TrimmedCurve)::DownCast(curve)->BasisCurve();
+						isLineSegment = bCurve->IsKind(STANDARD_TYPE(Geom2d_Line));
+					}
+					else
+						// Check current curve
+						isLineSegment = curve->IsKind(STANDARD_TYPE(Geom2d_Line));
+
+				default:
+					if (isLineSegment)
+					{	// If it's a line, return only start and end by default
+						points->Add(GetPoint(curve->FirstParameter()));
+						points->Add(GetPoint(curve->LastParameter()));
+					}
+					else
+					{
+						// Otherwise adapt points from descritization output
+						for (int i = 0; i < discretizer.NbPoints(); i++)
+						{
+							gp_Pnt p = discretizer.Value(i);
+							points->Add(XbimPoint3D(p.X(), p.Y(), p.Z()));
+						}
+					}
+				}
+			}
+			else 
+			{
+				throw gcnew NotSupportedException("No descretization available based on deflection");
+			}
+
+			return points;
+		}
+
+		IEnumerable<XbimPoint3D>^ XbimCurve2D::DiscretizeUniform(double equidistance, double tolerance)
+		{
+			if (!IsValid) return Enumerable::Empty<XbimPoint3D>();
+
+			Handle(Geom2d_Curve) curve = *pCurve2D;
+			List<XbimPoint3D>^ points = gcnew List<XbimPoint3D>();
+			for (Standard_Real t = curve->FirstParameter(); t += equidistance; t < curve->LastParameter()) 
+			{
+				points->Add( GetPoint(t) );
+			}
+
+			XbimPoint3D lpt = GetPoint(curve->LastParameter());
+			
+			if (lpt.Distance(points->default[points->Count - 1]) > tolerance) points->Add(lpt);
+			return points;
 		}
 	}
 
