@@ -1024,15 +1024,23 @@ namespace Xbim.ModelGeometry.Scene
                 {
                     XbimMatrix3D placementTransform = XbimPlacementTree.GetTransform(grid, contextHelper.PlacementTree, Engine);
                     placementTransform = ApplyShapeDisplacement(instance, placementTransform);
+                    var transproductBounds = instance.BoundingBox.Transform(placementTransform);
 
-                    // int context = 0;
-                    var gRep = grid.Representation?.Representations?.FirstOrDefault();
-                    var context = gRep.ContextOfItems;
-                    var intContext = (context == null) ? 0 : context.EntityLabel;
+                    foreach (var c in Contexts)
+                    {
+                        // Add grid to all contexts
+                        WriteShapeInstanceToStore(
+                            instance.GeometryId,
+                            instance.StyleLabel,
+                            c.EntityLabel,
+                            grid,
+                            placementTransform,
+                            instance.BoundingBox,
+                            XbimGeometryRepresentationType.OpeningsAndAdditionsIncluded,
+                            txn);
 
-                    WriteShapeInstanceToStore(instance.GeometryId, instance.StyleLabel, intContext, grid,
-                        placementTransform, instance.BoundingBox,
-                        XbimGeometryRepresentationType.OpeningsAndAdditionsIncluded, txn);
+                        contextHelper.Clusters[c].Enqueue(new XbimBBoxClusterElement(instance.GeometryId, transproductBounds));
+                    }
                 }
             }
 
