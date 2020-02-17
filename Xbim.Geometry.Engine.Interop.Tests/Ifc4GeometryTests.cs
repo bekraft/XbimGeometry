@@ -58,7 +58,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 Assert.IsTrue(pfs != null, "No IIfcAdvancedBrep found");
                 var solid = geomEngine.CreateSolid(pfs, logger);
 
-                Assert.AreEqual(102264692, solid.Volume, 0.99);
+                Assert.AreEqual(102264692, solid.Volume.Value, 0.99);
                 Assert.AreEqual(14, solid.Faces.Count);
 
             }
@@ -72,7 +72,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 Assert.IsTrue(pfs != null, "No IIfcPolygonalFaceSet found");
                 var pipe = geomEngine.CreateSolid(pfs, logger);
 
-                Assert.AreEqual(129879, pipe.Volume, 0.99);
+                Assert.AreEqual(129879, pipe.Volume.Value, 0.99);
                 Assert.AreEqual(15, pipe.Faces.Count);
 
             }
@@ -218,7 +218,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
             {
                 Assert.IsTrue(er.Entity != null, "No IfcCsgSolid found");
                 var solid = geomEngine.CreateSolidSet(er.Entity, logger).FirstOrDefault();
-                Assert.IsTrue(Math.Abs(solid.Volume - solid.BoundingBox.Volume) < 1e-5);
+                Assert.IsTrue(Math.Abs((solid.Volume - solid.BoundingBox.Volume) ?? double.NaN) < 1e-5);
 
             }
         }
@@ -231,7 +231,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 var eas = model.Instances.OfType<IfcExtrudedAreaSolid>().FirstOrDefault();
                 Assert.IsNotNull(eas);
                 var solid = geomEngine.CreateSolid(eas);
-                Assert.IsTrue(Math.Abs(solid.Volume - solid.BoundingBox.Volume) < 1e-5);
+                Assert.IsTrue(Math.Abs((solid.Volume - solid.BoundingBox.Volume) ?? double.NaN) < 1e-5);
             }
         }
         [TestMethod]
@@ -255,7 +255,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 var shape = model.Instances.OfType<IfcFacetedBrep>().FirstOrDefault();
                 Assert.IsNotNull(shape);
                 var geom = geomEngine.CreateSolidSet(shape).FirstOrDefault();
-                Assert.IsTrue(Math.Abs(geom.Volume - geom.BoundingBox.Volume) < 1e-5);
+                Assert.IsTrue(Math.Abs((geom.Volume - geom.BoundingBox.Volume) ?? double.NaN) < 1e-5);
             }
         }
 
@@ -286,7 +286,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 var shape = model.Instances.OfType<IfcAdvancedBrep>().FirstOrDefault();
                 Assert.IsNotNull(shape);
                 var geom = geomEngine.CreateSolid(shape);
-                Assert.IsTrue(Math.Abs(geom.Volume - 72767) < 1);
+                Assert.IsTrue(Math.Abs(geom.Volume.Value - 72767) < 1);
             }
         }
 
@@ -298,7 +298,7 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 var shape = model.Instances.OfType<IfcAdvancedBrep>().FirstOrDefault();
                 Assert.IsNotNull(shape);
                 var geom = geomEngine.CreateSolid(shape);
-                Assert.IsTrue(Math.Abs(geom.Volume - 0.83333333) < 1e-5);
+                Assert.IsTrue(Math.Abs(geom.Volume.Value - 0.83333333) < 1e-5);
             }
         }
 

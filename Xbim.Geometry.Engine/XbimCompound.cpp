@@ -602,14 +602,25 @@ namespace Xbim
 						GProp_GProps gProps;
 						BRepGProp::VolumeProperties(*pCompound, gProps, Standard_True);
 						double volume = gProps.Mass();
-						if (volume < 0) pCompound->Reverse();
+						if (volume < 0)
+						{
+							XbimGeometryCreator::LogWarning(logger, closedShell, "Inverted IfcClosedShell #{0} detected", closedShell->EntityLabel);
+							pCompound->Reverse();
+						}
 						double oneCubicMillimetre = Math::Pow(closedShell->Model->ModelFactors->OneMilliMeter, 3);
 						volume = Math::Abs(volume);
-						if (/*volume != 0 && */volume < oneCubicMillimetre) //sometimes zero volume is just a badly defined shape so let it through maybe
+						if (volume < oneCubicMillimetre) //sometimes zero volume is just a badly defined shape so let it through maybe
 						{
-							XbimGeometryCreator::LogWarning(logger, closedShell, "Very small closed IfcClosedShell has been ignored");
-							pCompound->Nullify();
-							pCompound = nullptr;
+							if (0 == volume)
+							{
+								XbimGeometryCreator::LogWarning(logger, closedShell, "Non-closed IfcClosedShell #{0} detected", closedShell->EntityLabel);
+							} 
+							else
+							{
+								XbimGeometryCreator::LogWarning(logger, closedShell, "Very small closed IfcClosedShell (#{0} mm3) has been ignored", volume);
+								pCompound->Nullify();
+								pCompound = nullptr;
+							}
 						}
 					}
 				}
@@ -621,10 +632,12 @@ namespace Xbim
 				}
 			}
 		}
+
 		void XbimCompound::Init(IIfcOpenShell^ openShell, ILogger^ logger)
 		{
 			Init((IIfcConnectedFaceSet^)openShell, logger);
 		}
+
 		bool XbimCompound::Sew()
 		{
 
@@ -660,18 +673,30 @@ namespace Xbim
 			return true;
 		}
 
-		double XbimCompound::Volume::get()
+		Nullable<double> XbimCompound::Volume::get()
 		{
 			if (IsValid)
 			{
 				GProp_GProps gProps;
 				BRepGProp::VolumeProperties(*pCompound, gProps, Standard_True);
 				GC::KeepAlive(this);
-				return gProps.Mass();
+				double mass = gProps.Mass();
+				if (0 != mass)
+					return Nullable<double>(mass);
 			}
-			else
-				return 0;
+			
+			return Nullable<double>();
 		}
+
+		double XbimCompound::VolumeValid::get()
+		{
+			if (IsValid)
+			{
+				return Solids->VolumeValid + Shells->VolumeValid;
+			}
+			return 0;
+		}
+
 		//This method copes with faces that may be advanced as well as ordinary
 		XbimShell^ XbimCompound::InitAdvancedFaces(IEnumerable<IIfcFace^>^ faces, ILogger^ logger)
 		{
