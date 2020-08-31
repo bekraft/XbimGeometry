@@ -86,7 +86,9 @@ namespace Xbim.Geometry.Engine.Interop.Tests
                 
                 Assert.IsTrue(resultSetCut.Count == cutSingularCut.Count);
                 //when done in one go the fuzzy tolerance kicks in and removes very thin solids
-                Assert.AreEqual(resultSetCut.First.Volume, cutSingularCut.First.Volume, 500);
+                Assert.IsTrue(resultSetCut.First.Volume.HasValue);
+                Assert.IsTrue(cutSingularCut.First.Volume.HasValue);
+                Assert.AreEqual(resultSetCut.First.Volume.Value, cutSingularCut.First.Volume.Value, 500);
             }
         }
 
