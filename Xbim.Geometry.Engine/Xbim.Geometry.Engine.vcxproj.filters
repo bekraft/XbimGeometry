@@ -9423,10 +9423,13 @@
     <ClInclude Include="OCC\src\Standard\Standard_ReadLineBuffer.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Factories\WireFactory.h">
+    <ClInclude Include="XbimMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XbimMesh.h">
+    <ClInclude Include="XbimNativeApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XbimProgressMonitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -15323,10 +15326,13 @@
     <ClCompile Include=".\OCC\src\IMeshTools\\IMeshTools_ShapeExplorer.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Factories\WireFactory.cpp">
+    <ClCompile Include="XbimMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="XbimMesh.cpp">
+    <ClCompile Include="XbimNativeApi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XbimProgressMonitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

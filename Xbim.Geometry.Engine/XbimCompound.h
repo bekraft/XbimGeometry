@@ -32,6 +32,7 @@ namespace Xbim
 			bool _isSewn;
 			double _sewingTolerance;
 			void InstanceCleanup();
+			bool WithinTolerance(const  TopoDS_Wire& topoOuterLoop, const TopoDS_Face& topoAdvancedFace, double _sewingTolerance);
 			//Initialisers
 			void Init(IIfcConnectedFaceSet^ faceSet,  ILogger^ logger);
 			TopoDS_Shape InitFaces(IEnumerable<IIfcFace^>^ faces,IIfcRepresentationItem^ theItem, ILogger^ logger);
@@ -92,6 +93,7 @@ namespace Xbim
 			virtual IXbimGeometryObjectSet^ Intersection(IXbimSolidSet^ solids, double tolerance, ILogger^ logger);
 			virtual IXbimGeometryObjectSet^ Intersection(IXbimSolid^ solid, double tolerance, ILogger^ logger);
 			virtual bool Sew();
+			virtual bool Sew(ILogger^ logger);
 #ifdef OCC_6_9_SUPPORTED //OCC 6.9.0. is better with complex booleans
 			static int MaxFacesToSew = 3000;
 #else
