@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net47</TargetFramework>
+    <TargetFrameworks>net472</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
-    
-    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,10 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\Xbim.Geometry.Engine.Interop\bin\$(Configuration)\net47\Xbim.Geometry.Engine32.dll" Link="Xbim.Geometry.Engine32.dll">
+    <None Include="..\Xbim.Geometry.Engine.Interop\bin\$(Configuration)\net472\Xbim.Geometry.Engine32.dll" Link="Xbim.Geometry.Engine32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\Xbim.Geometry.Engine.Interop\bin\$(Configuration)\net47\Xbim.Geometry.Engine64.dll" Link="Xbim.Geometry.Engine64.dll">
+    <None Include="..\Xbim.Geometry.Engine.Interop\bin\$(Configuration)\net472\Xbim.Geometry.Engine64.dll" Link="Xbim.Geometry.Engine64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -93,6 +91,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestFiles\cut_planes_within_fuzzy_tolerance.ifc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\Github\Github_issue_281_minimal.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestFiles\SurfaceCurveSweptAreaSolid_5.ifc">
@@ -446,6 +447,10 @@
     <None Update="TestFiles\CuttingOpeningInIfcClosedShellTest.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestFiles\Github\" />
   </ItemGroup>
   
 </Project>

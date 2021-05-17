@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -11,14 +12,13 @@ namespace XbimRegression
     /// </summary>
     public class Params
     {
-
         public int MaxThreads;
 
         private const int DefaultTimeout = 1000 * 60 * 20; // 20 mins
-        public bool Caching;
+        public bool Caching = false;
+        public bool ReportProgress = false;
+        public List<int> WriteBreps = null;
         public bool GeometryV1;
-
-       
 
         public Params(string[] args)
         {
@@ -38,18 +38,28 @@ namespace XbimRegression
             }
 
             Timeout = DefaultTimeout;
-
             CompoundParameter paramType = CompoundParameter.None;
 
-            foreach (string arg in args.Skip(1))
+            var eval = args.Skip(1).ToList();
+			for (int i = 0; i < eval.Count; i++)
             {
-                switch (paramType)
+				string arg = eval[i];
+				switch (paramType)
                 {
                     case CompoundParameter.None:
                         switch (arg.ToLowerInvariant())
                         {
                             case "/singlethread":
                                 MaxThreads = 1;
+                                break;
+                            case "/lowthreadscount":
+                                MaxThreads = Environment.ProcessorCount / 2;
+                                break;
+                            case "/writebreps":
+                            case "/breps":
+                            case "/brep":
+                                WriteBreps = WriteBreps ?? new List<int>();
+                                paramType = CompoundParameter.Breps;
                                 break;
                             case "/timeout":
                                 paramType = CompoundParameter.Timeout;
@@ -60,6 +70,9 @@ namespace XbimRegression
                             case "/caching":
                                 Caching = true;
                                 break;
+                            case "/progress":
+                                ReportProgress = true;
+                                break;
                             case "/geometryv1":
                                 GeometryV1 = true;
                                 break;
@@ -68,7 +81,6 @@ namespace XbimRegression
                                 break;
                         }
                         break;
-
                     case CompoundParameter.Timeout:
                         int timeout;
                         if (int.TryParse(arg, out timeout))
@@ -85,17 +97,26 @@ namespace XbimRegression
                         }
                         paramType = CompoundParameter.None;
                         break;
+                    case CompoundParameter.Breps:
+                        int brepv;
+                        if (int.TryParse(arg, out brepv))
+                        {
+                            WriteBreps.Add(brepv);
+                        }
+                        else
+						{
+                            paramType = CompoundParameter.None;
+                            i--;
+                        }
+                        break;
                 }
-                
             }
-
             IsValid = true;
-
         }
 
         private static void WriteSyntax()
         {
-            Console.WriteLine("Syntax: XbimRegression <modelfolder> [/timeout <seconds>]");
+            Console.WriteLine("Syntax: XbimRegression <modelfolder> [/timeout <seconds>] [/maxthreads <number>] [/singlethread] /writebreps [labels]");
         }
 
         /// <summary>
@@ -119,9 +140,8 @@ namespace XbimRegression
             None,
             Timeout,
             MaxThreads,
-            CachingOn
+            CachingOn,
+            Breps
         };
     }
-
-     
 }

@@ -99,6 +99,20 @@ namespace Xbim
 			}
 		}
 
+		void XbimGeometryCreator::WriteBrep(String^ filename, IXbimGeometryObject^ geomObj)
+		{
+			throw gcnew System::NotImplementedException();
+			// TODO: This is stubbed out until we merge the implementation from unpushed code.
+			// temp fix for broken build
+		}
+
+		IXbimGeometryObject^ XbimGeometryCreator::ReadBrep(String^ filename)
+		{
+			throw gcnew System::NotImplementedException();
+			// TODO: This is stubbed out until we merge the implementation from unpushed code.
+			// temp fix for broken build
+		}
+
 		void XbimGeometryCreator::LogError(ILogger^ logger, Object^ entity, String^ format, ...array<Object^>^ arg)
 		{
 			String^ msg = String::Format(format, arg);
@@ -279,6 +293,11 @@ namespace Xbim
 					if (objectLocation != nullptr) LogError(logger, geomRep, "Move is not implemented for IIfcGeometricSet");
 					return CreateGeometricSet((IIfcGeometricSet^)geomRep, logger);
 				}
+			}
+			catch (System::Exception^ Sexc)
+			{
+				LogError(logger, geomRep, "Error creating geometry #{2} representation of type {0}, {1}", geomRep->GetType()->Name, Sexc->Message, geomRep->EntityLabel);
+				return XbimGeometryObjectSet::Empty;
 			}
 			catch (const std::exception &exc)
 			{
@@ -1349,6 +1368,8 @@ namespace Xbim
 			else
 				return nullptr;
 		}
+
+		
 
 		IXbimGeometryObject^ XbimGeometryCreator::Trim(XbimSetObject^ geometryObject)
 		{

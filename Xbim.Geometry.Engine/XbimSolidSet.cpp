@@ -511,8 +511,13 @@ namespace Xbim
 				aBOP.SetNonDestructive(true);
 				aBOP.SetFuzzyValue(fuzzyTol);
 				
+				
+				//// todo: multiple boolean timeout has been disabled
+				//// what's the relatinoship between scope and monitor?
 				Handle(XbimProgressMonitor) pi = new XbimProgressMonitor(timeout);
-				aBOP.SetProgressIndicator(pi);
+				Message_ProgressScope scope(pi->Start(), "MultipleOperations", shapeTools.Size());
+				aBOP.SetProgressIndicator(scope);
+				
 				TopoDS_Shape aR;
 
 
@@ -582,7 +587,7 @@ namespace Xbim
 					try
 					{
 						Handle(XbimProgressMonitor) pi2 = new XbimProgressMonitor(timeout);
-						if (fixer.Perform(pi2))
+						if (fixer.Perform(pi2->Start()))
 						{
 							result = fixer.Shape();
 							retVal = BOOLEAN_SUCCESS;
@@ -1140,17 +1145,20 @@ namespace Xbim
 			else if (hs != nullptr)
 			{
 				XbimSolid^ s = gcnew XbimSolid(hs, logger);
-				if (s->IsValid) solids->Add(s);
+				if (s->IsValid)
+					solids->Add(s);
 			}
 			else if (csgPrim != nullptr)
 			{
 				XbimSolid^ s = gcnew XbimSolid(csgPrim, logger);
-				if (s->IsValid)solids->Add(s);
+				if (s->IsValid)
+					solids->Add(s);
 			}
 			else if (sm != nullptr)
 			{
 				XbimSolid^ s = gcnew XbimSolid(sm, logger);
-				if (s->IsValid)solids->Add(s); // otherwise create a  solid model
+				if (s->IsValid)
+					solids->Add(s); // otherwise create a  solid model
 			}
 			else
 			{

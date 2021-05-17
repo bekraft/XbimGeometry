@@ -30,7 +30,7 @@ namespace Xbim.Geometry.Engine.Interop
         public XbimGeometryEngine(ILogger<XbimGeometryEngine> logger)
         {
 
-            // Warn if runtime for Engine is not present, this is not necessary any more as we are net47
+            // Warn if runtime for Engine is not present, this is not necessary any more as we are net472
             //XbimPrerequisitesValidator.Validate();
 
 
@@ -837,8 +837,18 @@ namespace Xbim.Geometry.Engine.Interop
             }
         }
 
-        
-    }
+		public void WriteBrep(string filename, IXbimGeometryObject geomObj)
+		{
+            // no logger is provided so no tracing is started for this function
+            _engine.WriteBrep(filename, geomObj);
+		}
+
+		public IXbimGeometryObject ReadBrep(string filename)
+		{
+            // no logger is provided so no tracing is started for this function
+            return _engine.ReadBrep(filename);
+		}
+	}
 
     public static class LogHelper
     {

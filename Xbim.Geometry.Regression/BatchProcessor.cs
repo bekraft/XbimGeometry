@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Xbim.Common;
+using Xbim.Geometry.Engine.Interop;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using Xbim.IO.Memory;
@@ -112,6 +113,13 @@ namespace XbimRegression
             Console.ReadLine();
         }
 
+        private void report(int percentProgress, object userState)
+        {
+            if (percentProgress < 0 || percentProgress > 100)
+                return;
+            Console.WriteLine($"{userState}: {percentProgress}%");
+        }
+
         private ProcessResult ProcessFile(string ifcFile, StreamWriter writer, ILogger<BatchProcessor> logger)
         {
             RemoveFiles(ifcFile);
@@ -121,9 +129,11 @@ namespace XbimRegression
                 var watch = new Stopwatch();
                 try
                 {
-
+                    ReportProgressDelegate progress = null;
+                    if (_params.ReportProgress)
+                        progress = report;
                     watch.Start();
-                    using (var model = ParseModelFile(ifcFile, Params.Caching, logger))
+                    using (var model = ParseModelFile(ifcFile, Params.Caching, logger, progress))
                     {
                         var parseTime = watch.ElapsedMilliseconds;
                         var xbimFilename = BuildFileName(ifcFile, ".xbim");
@@ -131,49 +141,136 @@ namespace XbimRegression
                         if (_params.MaxThreads > 0)
                             context.MaxThreads = _params.MaxThreads;
                         // context.CustomMeshingBehaviour = CustomMeshingBehaviour;
-                        context.CreateContext();
-                        //}
-                        var geomTime = watch.ElapsedMilliseconds - parseTime;
-                        //XbimSceneBuilder sb = new XbimSceneBuilder();
-                        //string xbimSceneName = BuildFileName(ifcFile, ".xbimScene");
-                        //sb.BuildGlobalScene(model, xbimSceneName);
-                        // sceneTime = watch.ElapsedMilliseconds - geomTime;
-                        var header = model.Header;
-                        watch.Stop();
-                        var ohs = model.Instances.OfType<IIfcOwnerHistory>().FirstOrDefault();
-                        using (var geomReader = model.GeometryStore.BeginRead())
+                        if (_params.WriteBreps == null)
                         {
-                            result = new ProcessResult
+                            context.CreateContext(progress);
+                            //}
+                            var geomTime = watch.ElapsedMilliseconds - parseTime;
+                            //XbimSceneBuilder sb = new XbimSceneBuilder();
+                            //string xbimSceneName = BuildFileName(ifcFile, ".xbimScene");
+                            //sb.BuildGlobalScene(model, xbimSceneName);
+                            // sceneTime = watch.ElapsedMilliseconds - geomTime;
+                            var header = model.Header;
+                            watch.Stop();
+                            var ohs = model.Instances.OfType<IIfcOwnerHistory>().FirstOrDefault();
+                            using (var geomReader = model.GeometryStore.BeginRead())
                             {
-                                ParseDuration = parseTime,
-                                GeometryDuration = geomTime,
-                                // SceneDuration = sceneTime,
-                                FileName = ifcFile.Remove(0, Params.TestFileRoot.Length).TrimStart('\\'),
-                                Entities = model.Instances.Count,
-                                IfcSchema = header.FileSchema.Schemas.FirstOrDefault(),
-                                IfcDescription =
-                                    string.Format("{0}, {1}", header.FileDescription.Description.FirstOrDefault(),
-                                        header.FileDescription.ImplementationLevel),
-                                GeometryEntries = geomReader.ShapeInstances.Count(),
-                                IfcLength = ReadFileLength(ifcFile),
-                                XbimLength = ReadFileLength(xbimFilename),
-                                SceneLength = 0,
-                                IfcProductEntries = model.Instances.OfType<IIfcProduct>().Count(),
-                                IfcSolidGeometries = model.Instances.OfType<IIfcSolidModel>().Count(),
-                                IfcMappedGeometries = model.Instances.OfType<IIfcMappedItem>().Count(),
-                                BooleanGeometries = model.Instances.OfType<IIfcBooleanResult>().Count(),
-                                BReps = model.Instances.OfType<IIfcFaceBasedSurfaceModel>().Count() +
-                                        model.Instances.OfType<IIfcShellBasedSurfaceModel>().Count() + model.Instances
-                                            .OfType<IIfcManifoldSolidBrep>().Count(),
-                                Application = ohs == null ? "Unknown" : ohs.OwningApplication?.ApplicationFullName.ToString()
-                            };
-
+                                result = new ProcessResult
+                                {
+                                    ParseDuration = parseTime,
+                                    GeometryDuration = geomTime,
+                                    // SceneDuration = sceneTime,
+                                    FileName = ifcFile.Remove(0, Params.TestFileRoot.Length).TrimStart('\\'),
+                                    Entities = model.Instances.Count,
+                                    IfcSchema = header.FileSchema.Schemas.FirstOrDefault(),
+                                    IfcDescription =
+                                        string.Format("{0}, {1}", header.FileDescription.Description.FirstOrDefault(),
+                                            header.FileDescription.ImplementationLevel),
+                                    GeometryEntries = geomReader.ShapeInstances.Count(),
+                                    IfcLength = ReadFileLength(ifcFile),
+                                    XbimLength = ReadFileLength(xbimFilename),
+                                    SceneLength = 0,
+                                    IfcProductEntries = model.Instances.OfType<IIfcProduct>().Count(),
+                                    IfcSolidGeometries = model.Instances.OfType<IIfcSolidModel>().Count(),
+                                    IfcMappedGeometries = model.Instances.OfType<IIfcMappedItem>().Count(),
+                                    BooleanGeometries = model.Instances.OfType<IIfcBooleanResult>().Count(),
+                                    BReps = model.Instances.OfType<IIfcFaceBasedSurfaceModel>().Count() +
+                                            model.Instances.OfType<IIfcShellBasedSurfaceModel>().Count() + model.Instances
+                                                .OfType<IIfcManifoldSolidBrep>().Count(),
+                                    Application = ohs == null ? "Unknown" : ohs.OwningApplication?.ApplicationFullName.ToString()
+                                };
+                            }
                         }
+
+                        // Option to save breps of encountered classes by type or entityLabel for debugging purposes
+
+                        if (_params.WriteBreps != null)
+                        {
+                            var path = Path.Combine(
+                                    Path.GetDirectoryName(ifcFile),
+                                    Path.GetFileName(ifcFile) + ".brep.unclassified");
+                            IXbimGeometryEngine engine = new XbimGeometryEngine();
+                            if (!Directory.Exists(path))
+                                Directory.CreateDirectory(path);
+                            IfcStore s = model as IfcStore;
+                            if (s != null)
+                            {
+                                var ents = new List<IPersistEntity>();
+
+                                // ADD Individual entities to extract brep here
+                                // 
+                                if (_params.WriteBreps.Any())
+                                {
+                                    foreach (var item in _params.WriteBreps)
+                                    {
+                                        ents.Add(s.Instances[item]);
+                                    }
+                                }
+                                else
+                                {
+                                    // otherwise export the default types
+                                    //
+                                    var exportBrepByType = new string[]
+                                    {
+                                        "IfcFacetedBrep",
+								        // IIfcGeometricRepresentationItem
+								        "IfcCsgSolid",
+                                        "IfcExtrudedAreaSolid",
+                                        "IfcExtrudedAreaSolidTapered",
+                                        "IfcFixedReferenceSweptAreaSolid",
+                                        "IfcRevolvedAreaSolid",
+                                        "IfcRevolvedAreaSolidTapered",
+                                        "IfcSurfaceCurveSweptAreaSolid",
+                                        "IfcSectionedSolidHorizontal",
+                                        "IfcSweptDiskSolid",
+                                        "IfcSweptDiskSolidPolygonal",
+                                        "IfcBooleanResult",
+                                        "IfcBooleanClippingResult",
+								        // composing objects
+								        "IfcConnectedFaceSet"
+                                    };
+                                    foreach (var type in exportBrepByType)
+                                    {
+                                        ents.AddRange(s.Instances.OfType(type, false));
+                                    }
+                                }
+                                foreach (var ent in ents)
+                                {
+                                    try
+                                    {
+                                        Xbim.Common.Geometry.IXbimGeometryObject created = null;
+                                        if (ent is IIfcGeometricRepresentationItem igri)
+                                            created = engine.Create(igri);
+                                        if (ent is IIfcConnectedFaceSet icfs)
+                                            created = engine.CreateShell(icfs);
+                                        // IIfcConnectedFaceSet
+                                        if (created != null)
+                                        {
+                                            var brep = engine.ToBrep(created);
+                                            var brepFileName = Path.Combine(path, $"{ent.EntityLabel}.{ent.GetType().Name}.brep");
+                                            using (var tw = File.CreateText(brepFileName))
+                                            {
+                                                tw.WriteLine("DBRep_DrawableShape");
+                                                tw.WriteLine(brep);
+                                            }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"Error writing brep {ent.EntityLabel}: {ex.Message}");
+                                    }
+                                }
+                            }
+                        }
+
                         if (_params.Caching)
                         {
                             IfcStore s = ((IfcStore)model);
-                            s.SaveAs(xbimFilename, Xbim.IO.StorageType.Xbim);
-                            s.Close();
+                            if (s != null)
+                            {
+                                s.SaveAs(xbimFilename, Xbim.IO.StorageType.Xbim);
+                                s.Close();
+                            }
                         }
                     }
                 }
@@ -199,7 +296,7 @@ namespace XbimRegression
             return Xbim3DModelContext.MeshingBehaviourResult.Default;
         }
 
-        private IModel ParseModelFile(string ifcFileName, bool caching, ILogger<BatchProcessor> logger)
+        private IModel ParseModelFile(string ifcFileName, bool caching, ILogger<BatchProcessor> logger, ReportProgressDelegate progress)
         {
             IModel ret = null;
             if (string.IsNullOrWhiteSpace(ifcFileName))
@@ -211,9 +308,9 @@ namespace XbimRegression
                 case ".ifczip":
                 case ".ifcxml":
                     if (caching)
-                        ret = IfcStore.Open(ifcFileName, null, 0);
+                        ret = IfcStore.Open(ifcFileName, null, 0, progress);
                     else
-                        ret = MemoryModel.OpenRead(ifcFileName, logger);
+                        ret = MemoryModel.OpenRead(ifcFileName, logger, progress);
                     return ret;
                 default:
                     throw new NotImplementedException(
