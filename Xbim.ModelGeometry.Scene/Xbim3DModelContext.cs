@@ -1321,7 +1321,7 @@ namespace Xbim.ModelGeometry.Scene
             var localPercentageParsed = contextHelper.PercentageParsed;
             var localTally = contextHelper.Tally;
             // var dedupCount = 0;
-            var xbimTessellator = new XbimTessellator(Model, geomStorageType, _logger);
+            var xbimTessellator = new XbimTessellator(Model, geomStorageType, false, _logger);
             //var geomHash = new ConcurrentDictionary<RepresentationItemGeometricHashKey, int>();
 
             //var mapLookup = new ConcurrentDictionary<int, int>();
