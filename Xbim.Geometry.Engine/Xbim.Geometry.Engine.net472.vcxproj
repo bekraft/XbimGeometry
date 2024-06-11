@@ -598,6 +598,6 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Bitub.Occt.Win10.7.7.2\build\Bitub.Occt.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Bitub.Occt.Win10.7.7.2\build\Bitub.Occt.Win10.targets'))" />
+    <Error Condition="!Exists('..\packages\Bitub.Occt.Win10.7.7.2\build\Bitub.Occt.Win10.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Bitub.Occt.Win10.7.7.2\build\Bitub.Occt.Win10.targets'))" />
   </Target>
 </Project>
