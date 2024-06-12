@@ -63,7 +63,7 @@ bool FlexShape::GetStringAttribute(const TDF_Label& label, const TCollection_Asc
 	bool hasAttributes = label.FindAttribute(TDataStd_NamedData::GetID(), attributes);
 	if (hasAttributes && attributes->HasString(attributeName))
 	{
-		val = (const Standard_WideChar*)attributes->GetString(attributeName).ToExtString();
+		//val = (const Standard_WideChar*)attributes->GetString(attributeName).ToExtString();
 		return true;
 	}
 	else
