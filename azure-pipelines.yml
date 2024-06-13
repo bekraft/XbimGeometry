@@ -174,7 +174,7 @@ jobs:
 
   - task: DotNetCoreCLI@2
     name: 'Xbim_Publishing'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/feature/netcore'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/bekraft/netcore'))
     inputs:
       command: 'push'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
