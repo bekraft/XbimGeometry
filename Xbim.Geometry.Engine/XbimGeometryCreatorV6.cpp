@@ -37,7 +37,6 @@ namespace Xbim
 
 #pragma region Logging
 
-
 		void XbimGeometryCreatorV6::LogInfo(ILogger^ logger, Object^ entity, System::String^ format, ...array<Object^>^ arg)
 		{
 			throw gcnew System::NotImplementedException();
@@ -74,14 +73,10 @@ namespace Xbim
 			return XbimGeometryObject::ToXShape(geomObj);
 		}
 
-
 		IXbimGeometryObject^ XbimGeometryCreatorV6::Create(IIfcGeometricRepresentationItem^ geomRep, IIfcAxis2Placement3D^ objectLocation, ILogger^)
 		{
-
-
 			try
 			{
-
 				if (geomRep == nullptr)
 				{
 					throw gcnew System::NullReferenceException("Geometry Representation Item cannot be null");
@@ -1149,6 +1144,7 @@ namespace Xbim
 #pragma endregion
 
 #pragma region BRep Read and Write
+		
 		void XbimGeometryCreatorV6::WriteBrep(System::String^ fileName, IXbimGeometryObject^ geometryObject)
 		{
 			XbimOccWriter::Write(geometryObject, fileName);
@@ -1192,6 +1188,7 @@ namespace Xbim
 				System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)fName));
 			}
 		}
+		
 #pragma endregion
 
 
