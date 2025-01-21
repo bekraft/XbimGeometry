@@ -214,9 +214,9 @@ namespace Xbim
 				bool isEllipse = (dynamic_cast<IIfcEllipse^>(ifcTrimmedCurve->BasisCurve) != nullptr);
 				bool sense = ifcTrimmedCurve->SenseAgreement;
 				//get the parametric values
-				IfcTrimmingPreference trimPref = ifcTrimmedCurve->MasterRepresentation;
+				Xbim::Ifc4::Interfaces::IfcTrimmingPreference trimPref = ifcTrimmedCurve->MasterRepresentation;
 
-				bool trim_cartesian = (ifcTrimmedCurve->MasterRepresentation == IfcTrimmingPreference::CARTESIAN);
+				bool trim_cartesian = (ifcTrimmedCurve->MasterRepresentation == Xbim::Ifc4::Interfaces::IfcTrimmingPreference::CARTESIAN);
 
 				double u1 = double::NegativeInfinity;
 				double u2 = double::PositiveInfinity;
@@ -276,7 +276,7 @@ namespace Xbim
 			IXWire^ WireFactory::BuildWire(array<IXPoint^>^ xPoints)
 			{
 				//validate
-				if (xPoints->Length == 0)
+				if (xPoints == nullptr || xPoints->Length == 0)
 					throw RaiseGeometryFactoryException("Points has zero length");
 				TColgp_Array1OfPnt points(1, xPoints->Length);
 				int id = 0;

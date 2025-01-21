@@ -28,6 +28,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <OutputFolder>net6.0</OutputFolder>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <ProjectName>Xbim.Geometry.Engine.net6</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -84,24 +85,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>$(ProjectName)$(ManagedPlatform)</TargetName>
+    <!--<TargetName>$(ProjectName)$(ManagedPlatform)</TargetName>-->
+    <TargetName>Xbim.Geometry.Engine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -112,6 +114,7 @@
       <PreprocessorDefinitions>OCCT_NO_PLUGINS;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4691;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/clr:ECMAParamArray </AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>advapi32.lib;gdi32.lib;user32.lib;comdlg32.lib;wsock32.lib;Psapi.lib</AdditionalDependencies>
@@ -133,6 +136,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4691;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/clr:ECMAParamArray </AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>advapi32.lib;gdi32.lib;user32.lib;comdlg32.lib;wsock32.lib;Psapi.lib</AdditionalDependencies>
@@ -155,6 +159,7 @@
       <EnablePREfast>false</EnablePREfast>
       <DisableSpecificWarnings>4691;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/clr:ECMAParamArray </AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>advapi32.lib;gdi32.lib;user32.lib;comdlg32.lib;wsock32.lib;Psapi.lib</AdditionalDependencies>
@@ -177,6 +182,7 @@
       <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
       <DisableSpecificWarnings>4691;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/clr:ECMAParamArray </AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>advapi32.lib;gdi32.lib;user32.lib;comdlg32.lib;wsock32.lib;Psapi.lib</AdditionalDependencies>
@@ -190,9 +196,20 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BRep\OccExtensions\Curves\Geom_ConvertibleToBSpline.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Geom_GradientCurve.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Geom_SegmentedReferenceCurve.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Segments\Geom2d_Clothoid.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Segments\Geom2d_CosineSpiral.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Segments\Geom2d_Polynomial.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Segments\Geom2d_SineSpiral.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Segments\Geom2d_Spiral.h" />
+    <ClInclude Include="BRep\OccExtensions\Curves\Segments\Geom2d_PolynomialSpiral.h" />
+    <ClInclude Include="BRep\TaggedPoint.h" />
     <ClInclude Include="BRep\Unmanaged\NFootprint.h" />
     <ClInclude Include="BRep\XCylindricalSurface.h" />
     <ClInclude Include="BRep\XDirection.h" />
+    <ClInclude Include="BRep\XSectionedSurface.h" />
     <ClInclude Include="Factories\BIMAuthoringToolWorkArounds.h" />
     <ClInclude Include="BRep\OccExtensions\Geom2d_EllipseWithSemiAxes.h" />
     <ClInclude Include="BRep\OccExtensions\Geom2d_LineWithMagnitude.h" />
@@ -272,7 +289,10 @@
     <ClInclude Include="Factories\Unmanaged\NBIMAuthoringToolWorkArounds.h" />
     <ClInclude Include="Factories\MaterialFactory.h" />
     <ClInclude Include="Factories\Unmanaged\NMaterialFactory.h" />
+    <ClInclude Include="Services\Caching\Cache.h" />
+    <ClInclude Include="Services\Caching\ManagedCache.h" />
     <ClInclude Include="Services\ModelPlacementBuilder.h" />
+    <ClInclude Include="Services\ShapeBinarySerializer.h" />
     <ClInclude Include="Services\Unmanaged\PackedNormal.h" />
     <ClInclude Include="Services\Unmanaged\Graphic3d_BndBox3d.h" />
     <ClInclude Include="Services\Unmanaged\NFaceMeshIterator.h" />
@@ -291,15 +311,6 @@
     <ClInclude Include="Services\ShapeService.h" />
     <ClInclude Include="Services\Unmanaged\NWexBimMesh.h" />
     <ClInclude Include="Services\Unmanaged\PointInspector.h" />
-    <ClInclude Include="Storage\BRepDocument.h" />
-    <ClInclude Include="Storage\BRepDocumentManager.h" />
-    <ClInclude Include="Storage\BRepDocumentItem.h" />
-    <ClInclude Include="Storage\Unmanaged\FlexApp_Application.h" />
-    <ClInclude Include="Storage\Unmanaged\FlexDrivers.h" />
-    <ClInclude Include="Storage\Unmanaged\FlexDrivers_DocumentRetrievalDriver.h" />
-    <ClInclude Include="Storage\Unmanaged\FlexDrivers_DocumentStorageDriver.h" />
-    <ClInclude Include="Storage\Unmanaged\FlexShape.h" />
-    <ClInclude Include="Storage\Unmanaged\NBRepDocument.h" />
     <ClInclude Include="Visual\ColourRGB.h" />
     <ClInclude Include="Visual\VisualMaterial.h" />
     <ClInclude Include="Visual\XbimShapeColour.h" />
@@ -425,15 +436,7 @@
     <ClCompile Include="Services\Unmanaged\NWexBimMesh.cpp" />
     <ClCompile Include="Services\Unmanaged\PackedNormal.cpp" />
     <ClCompile Include="Services\Unmanaged\PointInspector.cpp" />
-    <ClCompile Include="Storage\BRepDocument.cpp" />
-    <ClCompile Include="Storage\BRepDocumentManager.cpp" />
-    <ClCompile Include="Storage\BRepDocumentItem.cpp" />
-    <ClCompile Include="Storage\Unmanaged\FlexApp_Application.cpp" />
-    <ClCompile Include="Storage\Unmanaged\FlexDrivers.cpp" />
-    <ClCompile Include="Storage\Unmanaged\FlexDrivers_DocumentRetrievalDriver.cpp" />
-    <ClCompile Include="Storage\Unmanaged\FlexDrivers_DocumentStorageDriver.cpp" />
-    <ClCompile Include="Storage\Unmanaged\FlexShape.cpp" />
-    <ClCompile Include="Storage\Unmanaged\NBRepDocument.cpp" />
+    <ClCompile Include="Services\ShapeBinarySerializer.cpp" />
     <ClCompile Include="Visual\ColourRGB.cpp" />
     <ClCompile Include="Visual\VisualMaterial.cpp" />
     <ClCompile Include="Visual\XbimShapeColour.cpp" />
@@ -507,7 +510,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xbim.Geometry.Abstractions">
-      <Version>6.2.347-develop</Version>
+      <Version>6.2.363-develop</Version>
+    </PackageReference>
+    <PackageReference Include="Bitub.Occt.Win10">
+      <Version>7.7.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
