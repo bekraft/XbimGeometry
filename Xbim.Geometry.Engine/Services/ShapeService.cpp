@@ -1,6 +1,5 @@
 #include "ShapeService.h"
 #include "Unmanaged/NWexBimMesh.h"
-#include "Unmanaged/NShapeProximityUtils.h"
 #include "Unmanaged/NShapeService.h"
 
 #include <BRepBuilderAPI_Transform.hxx>
@@ -257,10 +256,12 @@ namespace Xbim
 
 			bool ShapeService::IsOverlapping(IXShape^ shape1, IXShape^ shape2, IXMeshFactors^ meshFactors)
 			{
+				/*DO();
+				return false;*/
 				TopoDS_Shape topoShape1 = static_cast<XShape^>(shape1)->GetTopoShape();
 				TopoDS_Shape topoShape2 = static_cast<XShape^>(shape2)->GetTopoShape();
 
-				return NShapeProximityUtils::IsOverlapping
+				return Ptr()->IsOverlapping
 							(topoShape1, topoShape2, meshFactors->Tolerance, meshFactors->LinearDefection, meshFactors->AngularDeflection);
 			}
 

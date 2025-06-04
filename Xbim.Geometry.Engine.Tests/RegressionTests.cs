@@ -13,14 +13,26 @@ namespace Xbim.Geometry.Engine.Tests
     {
         private readonly ILoggerFactory _loggerFactory;
         private ILogger _logger;
+        private readonly IXbimGeometryServicesFactory _factory;
 
-        public RegressionTests(ILoggerFactory loggerFactory)
+        public RegressionTests(ILoggerFactory loggerFactory, IXbimGeometryServicesFactory factory)
         {
-            _logger= loggerFactory.CreateLogger<RegressionTests>();
+            _logger = loggerFactory.CreateLogger<RegressionTests>();
             _loggerFactory = loggerFactory;
+            _factory = factory;
         }
 
-        
+        [Fact]
+        public void CanBuildFaceSetsWithFaultedFacesWithColinearVertices()
+        {
+            using var model = MemoryModel.OpenRead("TestFiles\\Regression\\FaceSetWithColinearFaceVertices.ifc");
+            var engine = _factory.CreateGeometryEngineV6(model, _loggerFactory);
+            var shellBasedSurfaceModel = model.Instances[389345] as IIfcShellBasedSurfaceModel;
+
+            var v6Solid = engine.Build(shellBasedSurfaceModel);
+
+            Assert.NotNull(v6Solid);
+        }
 
         // todo: 2021: @SRL this test used to be ignored, but the reason is not clear
         [Fact]

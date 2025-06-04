@@ -22,14 +22,14 @@
 	  <NoWarn>CS8602;CS8604</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="FluentAssertions" Version="6.10.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-		<PackageReference Include="Moq" Version="4.18.4" />
+		<PackageReference Include="FluentAssertions" Version="8.2.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+		<PackageReference Include="Moq" Version="4.20.72" />
 		<PackageReference Include="NetTopologySuite.IO.SpatiaLite" Version="2.0.0" />
-		<PackageReference Include="xunit" Version="2.9.2" />
+		<PackageReference Include="xunit" Version="2.9.3" />
 		<PackageReference Include="xunit.abstractions" Version="2.0.3" />
 		<PackageReference Include="Xunit.DependencyInjection.Logging" Version="9.0.0" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.0.0">
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -150,6 +150,12 @@
 		<None Update="TestFiles\Github\Github_issue_512b.ifc">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="TestFiles\Ifc4TestFiles\IFC4TessellationComplex.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="TestFiles\Ifc4TestFiles\IfcTriangulatedFaceSet.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="TestFiles\Ifc4TestFiles\wffdmcc3-_Navis - Existing.ifc">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -177,6 +183,18 @@
 		<None Update="TestFiles\IFC4x3\SectionedSolidHorizontal-1.ifc">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="TestFiles\IFC4x3\T2-mod.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="TestFiles\IFC4x3\T2-mod2.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="TestFiles\IFC4x3\T2.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="TestFiles\IFC4x3\tessellation-with-individual-colors.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="TestFiles\IFC4x3\test.ifc">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -192,8 +210,20 @@
 		<None Update="TestFiles\IfcExamples\csg-primitive.ifc">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="TestFiles\IfcExamples\Roof-01_BCAD.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="TestFiles\IfcExamples\SampleHouse4.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="TestFiles\MeshSimplificationTestCases\IfcFlowTerminal.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="TestFiles\polyline_with_very_close_points.ifc">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="TestFiles\Regression\FaceSetWithColinearFaceVertices.ifc">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="TestFiles\SurfaceCurveSweptAreaSolid_5.ifc">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -559,6 +589,7 @@
 			
 			<Private>True</Private>
 		</ProjectReference>
+		<ProjectReference Include="..\Xbim.Tessellator\Xbim.Tessellator.csproj" />
 	</ItemGroup>
 
 	

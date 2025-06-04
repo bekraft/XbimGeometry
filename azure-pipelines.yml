@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-    - bekraft/netcore
+    - dev-il
   paths:
     exclude:
     - README.md
@@ -147,18 +147,18 @@ jobs:
   #  name: Geometry_metapackage_Pack
   
   
-  # - task: VSTest@2
-  #   displayName: 'VsTest - testAssemblies'
-  #   inputs:
-  #     testSelector: 'testAssemblies'
-  #     testAssemblyVer2: '**\bin\**\$(BuildConfiguration)\**\Xbim.Geometry.Engine.Tests.dll'
-  #     searchFolder: '$(System.DefaultWorkingDirectory)'
-  #     testFiltercriteria: 'Category!=ExcludeFromCI'
-  #     vsTestVersion: 'toolsInstaller'
-  #     codeCoverageEnabled: false
-  #     platform: '$(BuildPlatform)'
-  #     configuration: '$(BuildConfiguration)'
-  #     rerunFailedTests: true
+  - task: VSTest@2
+    displayName: 'VsTest - testAssemblies'
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: '**\bin\**\$(BuildConfiguration)\**\Xbim.Geometry.Engine.Tests.dll'
+      searchFolder: '$(System.DefaultWorkingDirectory)'
+      testFiltercriteria: 'Category!=ExcludeFromCI'
+      vsTestVersion: 'toolsInstaller'
+      codeCoverageEnabled: false
+      platform: '$(BuildPlatform)'
+      configuration: '$(BuildConfiguration)'
+      rerunFailedTests: true
   
   - task: PublishSymbols@1
     displayName: 'Publish symbols path: '
@@ -183,9 +183,9 @@ jobs:
 
   - task: DotNetCoreCLI@2
     name: 'Xbim_Publishing'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/bekraft/netcore'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev-il'))
     inputs:
       command: 'push'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
-      publishVstsFeed: 'Xbim.Geometry/xbim'
+      publishVstsFeed: 'XbimGeometry/xbim'

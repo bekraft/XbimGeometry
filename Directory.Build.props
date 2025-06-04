@@ -1,5 +1,4 @@
 <Project>
-
   <PropertyGroup>
     <IsTestProject Condition="$(MSBuildProjectName.EndsWith('Tests')) OR $(MSBuildProjectName.EndsWith('Regression'))">true</IsTestProject>
   </PropertyGroup>
@@ -24,7 +23,9 @@
     <RepositoryUrl>https://github.com/xBimTeam/XbimGeometry/tree/master</RepositoryUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign><DelaySign>false</DelaySign>
     <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
