@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-    - dev-il
+    - bekraft/netcore
   paths:
     exclude:
     - README.md
@@ -14,10 +14,7 @@ pr:
     - '*' 
 
 pool:
-  name: Default
-  demands:
-  - msbuild
-  - visualstudio
+  vmImage: 'windows-2022'
   
 variables:
   BuildConfiguration: 'Release'
